@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![macOS](https://img.shields.io/badge/macOS-13.0%2B-black?logo=apple)](#)
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-purple)](#)
-[![Apple Silicon](https://img.shields.io/badge/Apple-Silicon_M1%2FM2%2FM3%2FM4-orange)](#)
+[![Apple Silicon](https://img.shields.io/badge/Apple-Silicon_M1%2FM2%2FM3%2FM4%2FM5-orange)](#)
 
 </div>
 
@@ -58,7 +58,7 @@ MacBenchForge bridges the gap between low-level hardware performance and modern 
 
 Before you begin, ensure your Mac meets the following requirements:
 - **macOS Ventura (13.0)** or newer.
-- An **Apple Silicon Mac** (M1, M2, M3, or M4 series).
+- An **Apple Silicon Mac** (M1, M2, M3, M4, or M5 series).
 - **Homebrew** installed (`/opt/homebrew`).
 
 ---
