@@ -19,6 +19,7 @@ struct HardwareInfo {
     std::string memory_label;       // human-readable e.g. "16 GB"
     std::string macos_version;      // e.g. "14.5"
     std::string cpu_arch;           // always "arm64" for this project
+    uint64_t    vram_limit_bytes;   // Dynamic VRAM limit from iogpu sysctl
 };
 
 // ── Model ─────────────────────────────────────────────────────────────────────

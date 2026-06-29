@@ -116,7 +116,8 @@ void setup_routes(httplib::Server& svr, Config& config, Database& db, Crud& crud
             {"memory_bytes", hw.memory_bytes},
             {"memory_label", hw.memory_label},
             {"macos_version", hw.macos_version},
-            {"cpu_arch", hw.cpu_arch}
+            {"cpu_arch", hw.cpu_arch},
+            {"vram_limit_bytes", hw.vram_limit_bytes}
         };
         send_json(res, j);
     });

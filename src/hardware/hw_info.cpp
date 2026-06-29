@@ -32,6 +32,14 @@ HardwareInfo HardwareDetector::detect() {
     hw.macos_version    = macos_version();
     hw.cpu_arch         = "arm64";
 
+    uint64_t vram_limit_mb = 0;
+    size_t vram_size = sizeof(vram_limit_mb);
+    if (sysctlbyname("iogpu.wired_limit_mb", &vram_limit_mb, &vram_size, nullptr, 0) == 0 && vram_limit_mb > 0) {
+        hw.vram_limit_bytes = vram_limit_mb * 1024ULL * 1024ULL;
+    } else {
+        hw.vram_limit_bytes = static_cast<uint64_t>(hw.memory_bytes * 0.75); // fallback
+    }
+
     return hw;
 }
 
