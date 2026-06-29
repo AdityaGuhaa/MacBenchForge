@@ -165,4 +165,4 @@ recommended_quant = "Q4_K_M"
 # ─────────────────────────────────────────────────────────────────────────────
 [export]
 # Directory where exported files (JSON, CSV) are saved.
-export_dir = "~/Downloads/MacBenchForge/exports"
+export_dir = "~/Downloads"

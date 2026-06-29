@@ -72,7 +72,7 @@ Config default_config() {
     };
 
     // [export]
-    cfg.export_dir = expand_path("~/Downloads/MacBenchForge/exports");
+    cfg.export_dir = expand_path("~/Downloads");
 
     return cfg;
 }
