@@ -79,9 +79,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const hw = await window.API.getHardware();
         document.getElementById('hw-chip').textContent = hw.chip_name;
-        document.getElementById('hw-cores').textContent = `${hw.total_cores} Cores`;
-        document.getElementById('hw-gpu').textContent = `${hw.gpu_cores} GPU`;
-        document.getElementById('hw-ram').textContent = hw.memory_label;
+        document.getElementById('hw-cores').textContent = `${hw.total_cores} CPU Cores`;
+        document.getElementById('hw-gpu').textContent = `${hw.gpu_cores} GPU Cores`;
+        const vramGb = (hw.memory_bytes * 0.75) / (1024 * 1024 * 1024);
+        document.getElementById('hw-ram').textContent = `${hw.memory_label} (${vramGb.toFixed(1)} GB VRAM Available)`;
         
         // Save globally
         window.appData = { hw: hw };
