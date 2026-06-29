@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Install dependencies
+      run: brew install cmake curl openssl
+
+    - name: Configure CMake
+      run: cmake -B build
+
+    - name: Build
+      run: cmake --build build -j$(sysctl -n hw.logicalcpu)

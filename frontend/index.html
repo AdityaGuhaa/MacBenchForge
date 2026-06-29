@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MacBenchForge — LLM Benchmark Dashboard</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="dark-theme">
+    
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Header -->
+    <header class="glass-header">
+        <div class="logo">
+            <span class="logo-icon">🔥</span>
+            <span class="logo-text">MacBenchForge</span>
+        </div>
+        <div class="header-controls">
+            <button id="theme-toggle" class="btn-icon" title="Toggle Theme">🌙</button>
+        </div>
+    </header>
+
+    <!-- Hardware Bar -->
+    <section class="hardware-bar">
+        <div class="hw-item"><span class="hw-icon">🖥️</span> <span id="hw-chip">Detecting...</span></div>
+        <div class="hw-item"><span class="hw-icon">🧠</span> <span id="hw-cores">-</span></div>
+        <div class="hw-item"><span class="hw-icon">⚡</span> <span id="hw-gpu">-</span></div>
+        <div class="hw-item"><span class="hw-icon">💾</span> <span id="hw-ram">-</span></div>
+    </section>
+
+    <!-- Navigation -->
+    <nav class="tabs">
+        <button class="tab-btn active" data-target="tab-dashboard">Dashboard</button>
+        <button class="tab-btn" data-target="tab-models">Models</button>
+        <button class="tab-btn" data-target="tab-huggingface">HuggingFace</button>
+        <button class="tab-btn" data-target="tab-benchmark">Benchmark</button>
+        <button class="tab-btn" data-target="tab-history">History</button>
+        <button class="tab-btn" data-target="tab-export">Export</button>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content-area">
+        
+        <!-- DASHBOARD TAB -->
+        <div id="tab-dashboard" class="tab-panel active">
+            <div class="dashboard-header">
+                <h2>Welcome to MacBenchForge</h2>
+                <p>Native Apple Silicon performance benchmarking for LLMs.</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card glass-card">
+                    <h3>Models Available</h3>
+                    <div class="stat-value" id="stat-models-count">0</div>
+                </div>
+                <div class="stat-card glass-card">
+                    <h3>Total Runs</h3>
+                    <div class="stat-value" id="stat-runs-count">0</div>
+                </div>
+                <div class="stat-card glass-card">
+                    <h3>Best Speed</h3>
+                    <div class="stat-value" id="stat-best-speed">- t/s</div>
+                </div>
+            </div>
+
+            <div class="recent-runs glass-card mt-2">
+                <h3>Recent Activity</h3>
+                <div id="dashboard-recent-list">No recent runs.</div>
+            </div>
+        </div>
+
+        <!-- MODELS TAB -->
+        <div id="tab-models" class="tab-panel">
+            <div class="panel-header">
+                <h2>Local Models</h2>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button id="btn-pick-model" class="btn btn-secondary">Pick from Finder</button>
+                    <button id="btn-scan-models" class="btn btn-primary">Scan Directory</button>
+                </div>
+            </div>
+            <div id="models-grid" class="models-grid">
+                <!-- Populated via JS -->
+            </div>
+        </div>
+
+        <!-- HUGGINGFACE TAB -->
+        <div id="tab-huggingface" class="tab-panel">
+            <div class="hf-search-container glass-card">
+                <input type="text" id="hf-search-input" placeholder="Search HuggingFace for GGUF models..." class="input-field hf-search">
+            </div>
+            
+            <div id="hf-results-container" class="hf-results">
+                <!-- Curated or Search Results -->
+            </div>
+        </div>
+
+        <!-- BENCHMARK TAB -->
+        <div id="tab-benchmark" class="tab-panel">
+            <div class="benchmark-container">
+                <div class="benchmark-controls glass-card">
+                    <h2>Run Benchmark</h2>
+                    <div class="form-group">
+                        <label>Select Model</label>
+                        <select id="bm-model-select" class="input-field"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Benchmark Preset</label>
+                        <select id="bm-preset-select" class="input-field"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Prompt Type</label>
+                        <select id="bm-prompt-select" class="input-field"></select>
+                    </div>
+                    <button id="btn-start-benchmark" class="btn btn-primary btn-large w-100">Start Benchmark</button>
+                </div>
+
+                <div class="benchmark-status glass-card" id="bm-status-card">
+                    <h2>Status</h2>
+                    <div id="bm-status-text" class="status-text">Ready to run.</div>
+                    <div class="progress-bar-container hidden" id="bm-progress-container">
+                        <div class="progress-bar animated" id="bm-progress-bar"></div>
+                    </div>
+                    
+                    <div id="bm-results-grid" class="bm-results-grid hidden mt-2">
+                        <div class="result-box">
+                            <div class="res-label">Overall Speed</div>
+                            <div class="res-val" id="res-overall">-</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="res-label">Prompt Eval</div>
+                            <div class="res-val" id="res-prompt">-</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="res-label">Generation</div>
+                            <div class="res-val" id="res-gen">-</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="res-label">Time to First Token</div>
+                            <div class="res-val" id="res-ttft">-</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="res-label">Peak RAM</div>
+                            <div class="res-val" id="res-ram">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HISTORY TAB -->
+        <div id="tab-history" class="tab-panel">
+            <div class="panel-header">
+                <h2>Run History</h2>
+                <div class="history-actions">
+                    <button id="btn-compare-runs" class="btn btn-secondary" disabled>Compare Selected</button>
+                </div>
+            </div>
+            
+            <div class="table-container glass-card">
+                <table class="data-table" id="history-table">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="cb-hist-all"></th>
+                            <th>Date</th>
+                            <th>Model</th>
+                            <th>Quant</th>
+                            <th>Preset</th>
+                            <th>Speed (t/s)</th>
+                            <th>TTFT (ms)</th>
+                            <th>RAM (MB)</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-tbody">
+                        <!-- Populated via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Comparison View -->
+            <div id="comparison-view" class="comparison-view hidden mt-2">
+                <h2>Comparison</h2>
+                <div class="charts-grid">
+                    <div class="chart-container glass-card">
+                        <canvas id="chart-speed"></canvas>
+                    </div>
+                    <div class="chart-container glass-card">
+                        <canvas id="chart-radar"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXPORT TAB -->
+        <div id="tab-export" class="tab-panel">
+            <div class="export-container glass-card">
+                <h2>Export Data</h2>
+                <p>Select runs to export to JSON or CSV formats.</p>
+                
+                <div class="export-controls mt-2">
+                    <button id="btn-export-sel-all" class="btn btn-secondary">Select All</button>
+                    <button id="btn-export-desel-all" class="btn btn-secondary">Deselect All</button>
+                </div>
+                
+                <div id="export-list" class="export-list mt-1">
+                    <!-- Checkboxes populated via JS -->
+                </div>
+
+                <div class="export-actions mt-2">
+                    <button id="btn-export-json" class="btn btn-primary">Export JSON</button>
+                    <button id="btn-export-csv" class="btn btn-primary">Export CSV</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <!-- HF File Picker Modal -->
+    <div id="modal-hf-files" class="modal hidden">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3 id="modal-hf-title">Select Model File</h3>
+                <button class="btn-close" id="btn-close-hf-modal">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="table-container">
+                    <table class="data-table" id="hf-files-table">
+                        <thead>
+                            <tr>
+                                <th>Filename</th>
+                                <th>Size</th>
+                                <th>Quant</th>
+                                <th>Compatibility</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hf-files-tbody"></tbody>
+                    </table>
+                </div>
+                <div id="download-progress-container" class="mt-2 hidden">
+                    <p id="dl-status-text">Downloading...</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="dl-progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wizard Modal -->
+    <div id="modal-wizard" class="modal hidden">
+        <div class="modal-content glass-card wizard-card">
+            <div class="wizard-header text-center">
+                <h2>Welcome to MacBenchForge 🔥</h2>
+                <p>Let's get your benchmarking environment set up.</p>
+            </div>
+            <div class="wizard-body mt-2 text-center">
+                <div class="wizard-hw">
+                    <h3>Your Hardware</h3>
+                    <p id="wiz-hw-desc" class="accent-text">Detecting...</p>
+                    <p class="small-text text-secondary mt-1">We've tailored recommendations for your system memory.</p>
+                </div>
+            </div>
+            <div class="wizard-footer mt-2 flex-center">
+                <button id="btn-wizard-done" class="btn btn-primary btn-large">Let's Go!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/wizard.js"></script>
+    <script src="js/hf_browser.js"></script>
+    <script src="js/benchmark.js"></script>
+    <script src="js/history.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

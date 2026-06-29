@@ -1,0 +1,25 @@
+# Build directories
+build/
+bin/
+
+# Database files
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# macOS
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
+
+# Downloaded models
+models/
+*.gguf
+*.part
+
+# DMG exports
+*.dmg
+exports/

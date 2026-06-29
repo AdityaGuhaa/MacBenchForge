@@ -1,0 +1,169 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# MacBenchForge Configuration File
+# Edit this file to match your system setup.
+# ─────────────────────────────────────────────────────────────────────────────
+
+[general]
+# Port the web UI will be served on.
+# Open http://localhost:7860 in your browser.
+port = 7860
+
+# Path to llama-bench binary.
+# "bin/llama-bench" = looks next to the executable (bundled mode).
+# Change this if you have llama.cpp installed elsewhere.
+llama_bench_path = "llama-bench"
+
+# Path to the SQLite database file.
+# Created automatically on first run.
+db_path = "data/macbenchforge.db"
+
+# Automatically open the browser when MacBenchForge starts.
+open_browser = true
+
+# UI theme -- "light" or "dark"
+theme = "light"
+
+# ─────────────────────────────────────────────────────────────────────────────
+[discovery]
+# Directories to scan automatically for .gguf model files.
+# Add your own paths here.
+scan_dirs = [
+    "~/Downloads",
+    "~/.cache/huggingface/hub",
+]
+
+# Scan subdirectories recursively.
+recursive_scan = true
+
+# Default models directory for HuggingFace downloads.
+# Downloaded models are saved here.
+download_dir = "~/Downloads/MacBenchForge/models"
+
+# ─────────────────────────────────────────────────────────────────────────────
+[benchmark]
+# Default preset: "quick" or "thorough"
+default_preset = "quick"
+
+# Number of CPU threads to use during inference.
+# On M1 Pro: 8 performance + 2 efficiency = 10 total.
+# Recommended: use performance cores only (8 for M1 Pro).
+threads = 8
+
+# Number of layers to offload to Metal GPU.
+# 99 = offload everything (recommended for Apple Silicon unified memory).
+# 0  = CPU only.
+gpu_layers = 99
+
+# Repeat each benchmark N times and average (reduces noise).
+repetitions = 3
+
+# ─────────────────────────────────────────────────────────────────────────────
+[presets.quick]
+# Fast run -- good for rough comparison across many models.
+prompt_tokens     = 128
+generation_tokens = 128
+repetitions       = 1
+
+[presets.thorough]
+# Slower but statistically more reliable.
+prompt_tokens     = 512
+generation_tokens = 512
+repetitions       = 5
+
+# ─────────────────────────────────────────────────────────────────────────────
+[prompts.short_qa]
+label             = "Short QA"
+description       = "Short factual question-answer style prompt"
+prompt_tokens     = 64
+generation_tokens = 64
+
+[prompts.short_programming]
+label             = "Short Programming"
+description       = "Short code completion or simple function"
+prompt_tokens     = 128
+generation_tokens = 128
+
+[prompts.medium_reasoning]
+label             = "Medium Reasoning"
+description       = "Multi-step reasoning or explanation task"
+prompt_tokens     = 256
+generation_tokens = 256
+
+[prompts.medium_programming]
+label             = "Medium Programming"
+description       = "Medium complexity coding task"
+prompt_tokens     = 512
+generation_tokens = 256
+
+[prompts.long_architecture]
+label             = "Long Architecture"
+description       = "Large context architectural design or analysis"
+prompt_tokens     = 1024
+generation_tokens = 512
+
+[prompts.long_programming]
+label             = "Long Programming"
+description       = "Long codebase context, refactor or debug task"
+prompt_tokens     = 1024
+generation_tokens = 1024
+
+# ─────────────────────────────────────────────────────────────────────────────
+[huggingface]
+# HuggingFace Hub API base URL.
+api_base = "https://huggingface.co"
+api_search = "https://huggingface.co/api/models"
+
+# Optional: HuggingFace API token for accessing gated models.
+# Get yours at https://huggingface.co/settings/tokens
+# Leave empty for public models (no token needed).
+api_token = ""
+
+# Number of models to show per page in the browser.
+page_size = 20
+
+# Curated list of popular Apple Silicon compatible models.
+# These appear on the first page of the HF browser before the user searches.
+[[huggingface.curated]]
+repo_id     = "bartowski/Llama-3.2-3B-Instruct-GGUF"
+description = "Meta Llama 3.2 3B -- fast, great for everyday tasks"
+recommended_quant = "Q4_K_M"
+
+[[huggingface.curated]]
+repo_id     = "bartowski/Llama-3.2-1B-Instruct-GGUF"
+description = "Meta Llama 3.2 1B -- extremely fast, low memory"
+recommended_quant = "Q4_K_M"
+
+[[huggingface.curated]]
+repo_id     = "bartowski/gemma-3-4b-it-GGUF"
+description = "Google Gemma 3 4B -- strong reasoning"
+recommended_quant = "Q4_K_M"
+
+[[huggingface.curated]]
+repo_id     = "bartowski/gemma-3-1b-it-GGUF"
+description = "Google Gemma 3 1B -- ultra fast"
+recommended_quant = "Q4_K_M"
+
+[[huggingface.curated]]
+repo_id     = "bartowski/Qwen2.5-7B-Instruct-GGUF"
+description = "Alibaba Qwen 2.5 7B -- excellent multilingual"
+recommended_quant = "Q4_K_M"
+
+[[huggingface.curated]]
+repo_id     = "bartowski/Phi-4-mini-instruct-GGUF"
+description = "Microsoft Phi-4 Mini -- strong reasoning, small size"
+recommended_quant = "Q4_K_M"
+
+[[huggingface.curated]]
+repo_id     = "bartowski/Mistral-7B-Instruct-v0.3-GGUF"
+description = "Mistral 7B v0.3 -- reliable all-rounder"
+recommended_quant = "Q4_K_M"
+
+[[huggingface.curated]]
+repo_id     = "bartowski/SmolLM2-1.7B-Instruct-GGUF"
+description = "HuggingFace SmolLM2 1.7B -- tiny and capable"
+recommended_quant = "Q4_K_M"
+
+# ─────────────────────────────────────────────────────────────────────────────
+[export]
+# Directory where exported files (JSON, CSV) are saved.
+export_dir = "~/Downloads/MacBenchForge/exports"
