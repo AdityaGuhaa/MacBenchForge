@@ -3,6 +3,7 @@
 #include "db/models.hpp"
 #include <string>
 #include <vector>
+#include <optional>
 
 namespace macbenchforge {
 

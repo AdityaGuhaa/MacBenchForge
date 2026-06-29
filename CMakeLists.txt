@@ -140,14 +140,6 @@ add_custom_command(TARGET MacBenchForge POST_BUILD
     COMMENT "Copying config.toml to build output..."
 )
 
-# ─── Post-Build: Copy reference texts ────────────────────────────────────────
-add_custom_command(TARGET MacBenchForge POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/reference
-        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/reference
-    COMMENT "Copying reference texts to build output..."
-)
-
 # ─── Build Info ───────────────────────────────────────────────────────────────
 message(STATUS "")
 message(STATUS "=== MacBenchForge v${PROJECT_VERSION} ===")
