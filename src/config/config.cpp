@@ -22,8 +22,8 @@ Config default_config() {
 
     // [general]
     cfg.port             = 7860;
-    cfg.llama_bench_path = "bin/llama-bench";
-    cfg.db_path          = "data/macbenchforge.db";
+    cfg.llama_bench_path = "/opt/homebrew/bin/llama-bench";
+    cfg.db_path          = expand_path("~/.macbenchforge/macbenchforge.db");
     cfg.open_browser     = true;
     cfg.theme            = "light";
 

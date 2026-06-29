@@ -24,15 +24,28 @@ int main(int argc, char** argv) {
     std::cout << "🔥 MacBenchForge v0.1.0" << std::endl;
     std::cout << "=======================" << std::endl;
 
-    // 1. Load config
     std::string config_path = "config.toml";
     if (!fs::exists(config_path)) {
-        // Fallback to binary dir
-        fs::path bin_path = fs::canonical(fs::path(argv[0])).parent_path();
-        config_path = (bin_path / "config.toml").string();
+        // Fallback: check if we are in an app bundle (Contents/MacOS)
+        fs::path exe_path = fs::canonical(fs::path(argv[0]));
+        fs::path bin_path = exe_path.parent_path();
+        
+        fs::path bundle_res_path = bin_path.parent_path() / "Resources" / "config.toml";
+        if (fs::exists(bundle_res_path)) {
+            config_path = bundle_res_path.string();
+        } else {
+            // Default fallback
+            config_path = (bin_path / "config.toml").string();
+        }
     }
     
-    Config config = load_config(config_path);
+    Config config;
+    try {
+        config = load_config(config_path);
+    } catch (const std::exception& e) {
+        std::cerr << "Fatal Error: " << e.what() << std::endl;
+        return 1;
+    }
     std::cout << "Loaded config from " << config_path << std::endl;
 
     // 2. Setup DB

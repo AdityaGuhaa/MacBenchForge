@@ -8,14 +8,13 @@
 # Open http://localhost:7860 in your browser.
 port = 7860
 
-# Path to llama-bench binary.
-# "bin/llama-bench" = looks next to the executable (bundled mode).
-# Change this if you have llama.cpp installed elsewhere.
-llama_bench_path = "llama-bench"
+# Path to the llama-bench executable.
+# Relative to the MacBenchForge executable.
+llama_bench_path = "/opt/homebrew/bin/llama-bench"
 
 # Path to the SQLite database file.
 # Created automatically on first run.
-db_path = "data/macbenchforge.db"
+db_path = "~/.macbenchforge/macbenchforge.db"
 
 # Automatically open the browser when MacBenchForge starts.
 open_browser = true
