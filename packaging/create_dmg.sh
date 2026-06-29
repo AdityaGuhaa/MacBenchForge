@@ -2,7 +2,7 @@
 set -euo pipefail
 
 APP_NAME="MacBenchForge"
-VERSION="0.1.0"
+VERSION="1.1.0"
 BUILD_DIR="build/bin"
 DMG_NAME="${APP_NAME}_v${VERSION}_AppleSilicon.dmg"
 APP_DIR="${BUILD_DIR}/${APP_NAME}.app"

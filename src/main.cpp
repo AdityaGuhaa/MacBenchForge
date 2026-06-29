@@ -21,7 +21,7 @@ void signal_handler(int signal) {
 }
 
 int main(int argc, char** argv) {
-    std::cout << "🔥 MacBenchForge v0.1.0" << std::endl;
+    std::cout << "🔥 MacBenchForge v1.1.0" << std::endl;
     std::cout << "=======================" << std::endl;
 
     std::string config_path = "config.toml";
@@ -33,9 +33,11 @@ int main(int argc, char** argv) {
         fs::path bundle_res_path = bin_path.parent_path() / "Resources" / "config.toml";
         if (fs::exists(bundle_res_path)) {
             config_path = bundle_res_path.string();
+            fs::current_path(bundle_res_path.parent_path());
         } else {
             // Default fallback
             config_path = (bin_path / "config.toml").string();
+            fs::current_path(bin_path);
         }
     }
     
