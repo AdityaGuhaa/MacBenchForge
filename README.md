@@ -39,7 +39,7 @@
 * **Advanced Benchmarking**: 
   * Test **Time To First Token (TTFT)** and **Tokens per Second (t/s)**.
   * Simulate real-world loads with customizable **Prompt Types** (Short QA, Long Code Generation, etc.) and **Presets** (Quick vs. Thorough).
-* **Hardware Telemetry**: Automatically detects your specific M-series chip, CPU/GPU core counts, and system RAM to offer curated model recommendations.
+* **Hardware Telemetry**: Automatically detects your specific M-series chip, CPU/GPU core counts, system RAM, and dynamic VRAM Metal wiring limits (via `iogpu.wired_limit_mb`) in real-time.
 * **Beautiful Visualizations**: A sleek, dark-themed glassmorphic UI featuring live progress bars, toast notifications, and `Chart.js` graphs to compare your run history.
 * **Data Portability**: Export your benchmark run history seamlessly to JSON or CSV.
 
