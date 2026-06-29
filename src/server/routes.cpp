@@ -93,7 +93,9 @@ void setup_routes(httplib::Server& svr, Config& config, Database& db, Crud& crud
 
     // Helper for JSON responses
     auto send_json = [](httplib::Response& res, const json& j) {
-        res.set_content(j.dump(), "application/json");
+        res.set_header("Content-Type", "application/json");
+        res.set_header("Cache-Control", "no-cache, no-store, must-revalidate");
+        res.body = j.dump();
     };
 
     auto get_run_summary = [&crud](int id) -> std::optional<RunSummary> {
