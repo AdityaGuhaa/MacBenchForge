@@ -24,6 +24,7 @@ fi
 # Copy resources
 cp -R frontend "${APP_DIR}/Contents/Resources/"
 cp config.toml "${APP_DIR}/Contents/Resources/"
+cp packaging/AppIcon.icns "${APP_DIR}/Contents/Resources/"
 cp packaging/Info.plist "${APP_DIR}/Contents/"
 
 # Fix rpaths for Homebrew libs if necessary (simplified for this script)
