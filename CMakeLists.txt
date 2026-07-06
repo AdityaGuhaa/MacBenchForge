@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(MacBenchForge VERSION 1.1.0 LANGUAGES CXX)
+project(MacBenchForge VERSION 1.2.1 LANGUAGES CXX)
 
 # ─── C++ Standard ─────────────────────────────────────────────────────────────
 set(CMAKE_CXX_STANDARD 17)

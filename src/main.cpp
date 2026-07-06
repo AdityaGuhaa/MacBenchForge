@@ -21,7 +21,7 @@ void signal_handler(int signal) {
 }
 
 int main(int argc, char** argv) {
-    std::cout << "🔥 MacBenchForge v1.1.0" << std::endl;
+    std::cout << "🔥 MacBenchForge v1.2.1" << std::endl;
     std::cout << "=======================" << std::endl;
 
     std::string config_path = "config.toml";
