@@ -13,8 +13,8 @@ int Crud::insert_hardware(const HardwareInfo& hw) {
     SQLite::Statement stmt(db_, R"(
         INSERT INTO hardware_snapshots
             (chip_name, perf_cores, efficiency_cores, total_cores,
-             gpu_cores, memory_bytes, memory_label, macos_version, cpu_arch)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+             gpu_cores, memory_bytes, memory_label, macos_version, cpu_arch, vram_limit_bytes)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     )");
     stmt.bind(1, hw.chip_name);
     stmt.bind(2, hw.perf_cores);
@@ -25,6 +25,7 @@ int Crud::insert_hardware(const HardwareInfo& hw) {
     stmt.bind(7, hw.memory_label);
     stmt.bind(8, hw.macos_version);
     stmt.bind(9, hw.cpu_arch);
+    stmt.bind(10, (int64_t)hw.vram_limit_bytes);
     stmt.exec();
     return (int)db_.getLastInsertRowid();
 }
@@ -32,7 +33,7 @@ int Crud::insert_hardware(const HardwareInfo& hw) {
 std::optional<HardwareInfo> Crud::get_latest_hardware() {
     SQLite::Statement stmt(db_, R"(
         SELECT chip_name, perf_cores, efficiency_cores, total_cores,
-               gpu_cores, memory_bytes, memory_label, macos_version, cpu_arch
+               gpu_cores, memory_bytes, memory_label, macos_version, cpu_arch, vram_limit_bytes
         FROM hardware_snapshots
         ORDER BY id DESC LIMIT 1
     )");
@@ -406,6 +407,7 @@ HardwareInfo Crud::row_to_hardware(SQLite::Statement& stmt) {
     hw.memory_label      = stmt.getColumn(6).getText();
     hw.macos_version     = stmt.getColumn(7).getText();
     hw.cpu_arch          = stmt.getColumn(8).getText();
+    hw.vram_limit_bytes  = (uint64_t)stmt.getColumn(9).getInt64();
     return hw;
 }
 

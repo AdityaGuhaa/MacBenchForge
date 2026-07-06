@@ -112,7 +112,7 @@ All core behavior is driven by `config.toml`, generated next to your executable.
 Key tunable parameters include:
 * `benchmark.threads`: The number of CPU threads used during processing (Default: 8).
 * `benchmark.gpu_layers`: Layers offloaded to the GPU (Default: 99 for full Metal acceleration).
-* `server.port`: Change the UI port if `7860` is in use.
+* `general.port`: Change the UI port if `7860` is in use.
 * `huggingface.api_token`: Add your HF token to access gated/private models.
 
 ---

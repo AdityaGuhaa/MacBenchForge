@@ -19,6 +19,10 @@ Database::Database(const std::string& db_path)
     // Allows frontend to read results while a benchmark is writing
     db_.exec("PRAGMA journal_mode=WAL;");
 
+    // Busy timeout -- wait up to 5 seconds if another thread holds a write lock
+    // Prevents SQLITE_BUSY errors during concurrent benchmark/download operations
+    db_.exec("PRAGMA busy_timeout=5000;");
+
     // Enforce foreign key constraints
     db_.exec("PRAGMA foreign_keys=ON;");
 
@@ -51,6 +55,7 @@ void Database::create_hardware_table() {
             memory_label      TEXT    NOT NULL DEFAULT '',
             macos_version     TEXT    NOT NULL DEFAULT '',
             cpu_arch          TEXT    NOT NULL DEFAULT 'arm64',
+            vram_limit_bytes  INTEGER NOT NULL DEFAULT 0,
             recorded_at       TEXT    NOT NULL DEFAULT (datetime('now'))
         );
     )");

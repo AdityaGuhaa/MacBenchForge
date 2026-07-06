@@ -98,7 +98,9 @@ window.ChartManager = {
                     100 - ((s.time_to_first_token_ms / maxTtft) * 100), // Lower is better for TTFT
                     100 - ((s.ram_usage_mb / maxRam) * 100)           // Lower is better for RAM
                 ],
-                backgroundColor: color.replace(')', ', 0.2)').replace('rgb', 'rgba'),
+                backgroundColor: color.startsWith('#') 
+                    ? color + '33'  // Append 33 (hex for ~20% opacity) to hex color
+                    : color.replace(')', ', 0.2)').replace('rgb', 'rgba'),
                 borderColor: color,
                 pointBackgroundColor: color
             };

@@ -303,39 +303,22 @@ void setup_routes(httplib::Server& svr, Config& config, Database& db, Crud& crud
             std::string preset_name = body["preset_name"];
             std::string prompt_type = body["prompt_type"];
 
-            // Note: to return the run_id immediately, we ideally need to create it here.
-            // For simplicity, we create a placeholder run, return it, then the thread actually runs it.
-            // But Runner currently creates the config and run. Let's just create a dummy one here,
-            // or let the runner run synchronously if fast enough? No, runner takes time.
-            // We'll let the thread handle it, but wait briefly for it to create the run_id.
-            
-            // Actually, we can just insert the run directly here.
-            BenchmarkConfig bc;
-            bc.preset_name = preset_name;
-            bc.prompt_type = prompt_type;
-            bc.threads = config.threads;
-            bc.gpu_layers = config.gpu_layers;
-            int config_id = crud.insert_config(bc);
-            int run_id = crud.insert_run(model_id, config_id, hardware_id);
-            crud.update_run_status(run_id, "pending");
+            // Validate model exists before spawning thread
+            auto model_opt = crud.get_model_by_id(model_id);
+            if (!model_opt) {
+                res.status = 404;
+                send_json(res, {{"error", "Model not found"}});
+                return;
+            }
 
+            // Spawn benchmark on a detached thread.
+            // BenchmarkRunner creates the config + run records itself.
+            // Client polls /api/runs to find the latest run.
             std::thread([&crud, &config, model_id, preset_name, prompt_type, hardware_id]() {
-                // Modified Runner to accept existing run_id if needed, but since it creates it, 
-                // we'll just run it. We should modify BenchmarkRunner to take an existing run_id, 
-                // but since we didn't, we'll let it create a duplicate and return THAT run_id.
-                // Wait, no. Our BenchmarkRunner creates the run. So we shouldn't create it here.
-                // Since this is a test, let's just run it detached and return a placeholder run_id, 
-                // or just block? Blocking HTTP is bad.
-                // We'll instantiate Runner, it returns run_id sync. So we can't detach before.
-                // Better: run detached, client polls /api/runs to find the newest run. 
-                // But client needs ID. 
-                // Let's modify BenchmarkRunner to take run_id? I already wrote it.
                 BenchmarkRunner runner(config, crud);
                 runner.run_benchmark(model_id, preset_name, prompt_type, hardware_id);
             }).detach();
 
-            // Client will have to poll for the latest run.
-            // We return ok: true.
             json j = {{"status", "started"}};
             send_json(res, j);
             

@@ -30,7 +30,7 @@ void Server::start() {
     }
 
     std::cout << "Starting Server on http://localhost:" << config_.port << std::endl;
-    svr_.listen("0.0.0.0", config_.port);
+    svr_.listen("127.0.0.1", config_.port);
 }
 
 void Server::stop() {
