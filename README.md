@@ -4,7 +4,7 @@
 
 **The Ultimate Native LLM Benchmarking Dashboard for Apple Silicon**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![macOS](https://img.shields.io/badge/macOS-13.0%2B-black?logo=apple)](#)
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-purple)](#)
 [![Apple Silicon](https://img.shields.io/badge/Apple-Silicon_M1%2FM2%2FM3%2FM4%2FM5-orange)](#)
@@ -145,7 +145,7 @@ Please ensure your code follows the existing style guidelines (C++17 standards, 
 
 ## License & Attribution
 
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for the full legal text.
+This project is licensed under the **Apache License 2.0**. See the [LICENSE](LICENSE) file for the full legal text.
 
 **Attribution Request**  
 MacBenchForge is a labor of love. If you use this tool, modify it for your own purposes, or build a commercial/open-source product on top of it, **please provide credit to Aditya Guha**. 
