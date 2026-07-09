@@ -54,6 +54,9 @@ window.ChartManager = {
                 ]
             },
             options: {
+                layout: {
+                    padding: { top: 20 }
+                },
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
@@ -64,7 +67,29 @@ window.ChartManager = {
                     y: { grid: { color: c.grid } },
                     x: { grid: { display: false } }
                 }
-            }
+            },
+            plugins: [{
+                id: 'topLabels',
+                afterDatasetsDraw(chart) {
+                    const ctx = chart.ctx;
+                    ctx.save();
+                    ctx.font = '600 12px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'bottom';
+                    ctx.fillStyle = ChartManager.getColors().text;
+                    
+                    chart.data.datasets.forEach((dataset, i) => {
+                        const meta = chart.getDatasetMeta(i);
+                        meta.data.forEach((bar, index) => {
+                            const val = dataset.data[index];
+                            if (val) {
+                                ctx.fillText(val.toFixed(2), bar.x, bar.y - 4);
+                            }
+                        });
+                    });
+                    ctx.restore();
+                }
+            }]
         });
     },
 
