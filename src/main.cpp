@@ -30,7 +30,7 @@ extern "C" void on_window_close(void) {
 }
 
 int main(int argc, char** argv) {
-    std::cout << "🔥 MacBenchForge v1.2.1" << std::endl;
+    std::cout << "🔥 MacBenchForge v2.1.0" << std::endl;
     std::cout << "=======================" << std::endl;
 
     std::string config_path = "config.toml";
