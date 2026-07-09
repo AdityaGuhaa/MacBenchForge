@@ -8,6 +8,7 @@
 #include <nlohmann/json.hpp>
 #include <iostream>
 #include <thread>
+#include <filesystem>
 
 using json = nlohmann::json;
 
@@ -131,19 +132,82 @@ void setup_routes(httplib::Server& svr, Config& config, Database& db, Crud& crud
 
     svr.Post("/api/models/scan", [&crud, &config, send_json](const httplib::Request&, httplib::Response& res) {
         Scanner scanner;
-        auto found = scanner.scan(config.scan_dirs, config.recursive_scan);
+
+        // Scan all common user-accessible directories on macOS
+        std::vector<std::string> scan_dirs;
+
+        // User's home directory and all subdirectories
+        const char* home = getenv("HOME");
+        if (home) {
+            scan_dirs.push_back(std::string(home));
+        }
+
+        // External volumes (USB drives, external disks, NAS mounts)
+        if (std::filesystem::exists("/Volumes")) {
+            for (const auto& entry : std::filesystem::directory_iterator("/Volumes",
+                    std::filesystem::directory_options::skip_permission_denied)) {
+                if (entry.is_directory()) {
+                    scan_dirs.push_back(entry.path().string());
+                }
+            }
+        }
+
+        // Also scan /tmp and /opt in case models are stored there
+        if (std::filesystem::exists("/tmp")) scan_dirs.push_back("/tmp");
+        if (std::filesystem::exists("/opt")) scan_dirs.push_back("/opt");
+
+        // Add any config-defined directories that aren't already covered
+        for (const auto& d : config.scan_dirs) {
+            std::string expanded = expand_path(d);
+            bool already = false;
+            for (const auto& s : scan_dirs) {
+                if (expanded.find(s) == 0 || s.find(expanded) == 0) {
+                    already = true;
+                    break;
+                }
+            }
+            if (!already) scan_dirs.push_back(expanded);
+        }
+
+        auto found = scanner.scan(scan_dirs, true); // always recursive
         int added = 0;
-        
-        // Deactivate all first? For now just insert (Crud handles UPSERT implicitly based on path if we had a unique constraint, 
-        // but let's just insert for now)
+
         for (auto& m : found) {
             crud.insert_model(m);
             added++;
         }
-        
+
+        // Deactivate models whose files no longer exist
+        auto db_models = crud.get_all_models();
+        int deactivated = 0;
+        for (const auto& m : db_models) {
+            if (!std::filesystem::exists(m.path)) {
+                crud.deactivate_model(m.id);
+                deactivated++;
+            }
+        }
+
+        // Return fresh model list
+        auto all_models = crud.get_all_models();
+        json models_json = json::array();
+        for (const auto& m : all_models) {
+            models_json.push_back({
+                {"id", m.id},
+                {"name", m.name},
+                {"path", m.path},
+                {"file_size", m.file_size},
+                {"size_label", m.size_label},
+                {"quant_label", m.quant_label},
+                {"is_active", m.is_active}
+            });
+        }
+
         json j = {
-            {"count", added},
-            {"models", found}
+            {"count", (int)all_models.size()},
+            {"scanned_dirs", (int)scan_dirs.size()},
+            {"new_found", added},
+            {"deactivated", deactivated},
+            {"models", models_json}
         };
         send_json(res, j);
     });

@@ -109,14 +109,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     const scanBtn = document.getElementById('btn-scan-models');
     if (scanBtn) {
         scanBtn.addEventListener('click', async () => {
-            scanBtn.textContent = 'Scanning...';
+            scanBtn.innerHTML = '<span class="pulse-dot"></span> Scanning entire Mac...';
             scanBtn.disabled = true;
             try {
                 const res = await window.API.scanModels();
-                window.showToast(`Found ${res.count} models`, 'success');
+                const parts = [];
+                parts.push(`${res.count} model(s) found`);
+                if (res.new_found > 0) parts.push(`${res.new_found} new`);
+                if (res.deactivated > 0) parts.push(`${res.deactivated} stale removed`);
+                parts.push(`${res.scanned_dirs} directories scanned`);
+                window.showToast(parts.join(' · '), 'success');
                 loadModelsGrid();
+            } catch(e) {
+                window.showToast('Scan failed: ' + e.message, 'error');
             } finally {
-                scanBtn.textContent = 'Scan Directory';
+                scanBtn.innerHTML = '🔍 Scan Entire Mac';
                 scanBtn.disabled = false;
             }
         });
