@@ -133,16 +133,21 @@ void setup_routes(httplib::Server& svr, Config& config, Database& db, Crud& crud
     svr.Post("/api/models/scan", [&crud, &config, send_json](const httplib::Request&, httplib::Response& res) {
         Scanner scanner;
 
-        // Scan all common user-accessible directories on macOS
+        // Scan specific common user-accessible directories on macOS (avoid full ~ recursion which is too slow)
         std::vector<std::string> scan_dirs;
 
-        // User's home directory and all subdirectories
         const char* home = getenv("HOME");
         if (home) {
-            scan_dirs.push_back(std::string(home));
+            std::string h(home);
+            scan_dirs.push_back(h + "/Downloads");
+            scan_dirs.push_back(h + "/Desktop");
+            scan_dirs.push_back(h + "/Documents");
+            scan_dirs.push_back(h + "/.lmstudio/models");
+            scan_dirs.push_back(h + "/.cache/lm-studio/models");
+            scan_dirs.push_back(h + "/llama.cpp/models");
         }
 
-        // External volumes (USB drives, external disks, NAS mounts)
+        // External volumes (USB drives, external disks)
         if (std::filesystem::exists("/Volumes")) {
             for (const auto& entry : std::filesystem::directory_iterator("/Volumes",
                     std::filesystem::directory_options::skip_permission_denied)) {
