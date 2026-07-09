@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(MacBenchForge VERSION 1.2.1 LANGUAGES CXX)
+project(MacBenchForge VERSION 1.2.1 LANGUAGES CXX OBJCXX)
 
 # ─── C++ Standard ─────────────────────────────────────────────────────────────
 set(CMAKE_CXX_STANDARD 17)
@@ -65,6 +65,7 @@ set(SOURCES
     src/export/exporter.cpp
     src/server/server.cpp
     src/server/routes.cpp
+    src/app/native_window.mm
 )
 
 # ─── Executable ───────────────────────────────────────────────────────────────
@@ -92,13 +93,17 @@ target_link_libraries(MacBenchForge PRIVATE
 )
 
 # ─── macOS Frameworks ─────────────────────────────────────────────────────────
-# IOKit     -- GPU core count via AGXAccelerator
-# CoreFoundation -- required by IOKit
-# Foundation     -- macOS base framework
+# IOKit           -- GPU core count via AGXAccelerator
+# CoreFoundation  -- required by IOKit
+# Foundation      -- macOS base framework
+# AppKit          -- Native window (NSWindow, NSApplication)
+# WebKit          -- Embedded browser (WKWebView)
 target_link_libraries(MacBenchForge PRIVATE
     "-framework IOKit"
     "-framework CoreFoundation"
     "-framework Foundation"
+    "-framework AppKit"
+    "-framework WebKit"
 )
 
 # ─── RPATH for bundled dylibs ─────────────────────────────────────────────────

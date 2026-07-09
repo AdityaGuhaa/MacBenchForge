@@ -4,9 +4,11 @@
 #include "hardware/hw_info.hpp"
 #include "discovery/scanner.hpp"
 #include "server/server.hpp"
+#include "app/native_window.h"
 #include <iostream>
 #include <csignal>
 #include <filesystem>
+#include <thread>
 
 namespace fs = std::filesystem;
 using namespace macbenchforge;
@@ -16,6 +18,13 @@ Server* g_server = nullptr;
 void signal_handler(int signal) {
     if (g_server) {
         std::cout << "\nCaught signal " << signal << ", shutting down server gracefully..." << std::endl;
+        g_server->stop();
+    }
+}
+
+// Called by the native window when the user closes it
+extern "C" void on_window_close(void) {
+    if (g_server) {
         g_server->stop();
     }
 }
@@ -86,7 +95,21 @@ int main(int argc, char** argv) {
     std::signal(SIGINT, signal_handler);
     std::signal(SIGTERM, signal_handler);
 
-    server.start(); // Blocks until stopped
+    if (config.open_browser) {
+        // Native window mode: run the HTTP server on a background thread
+        // and the macOS GUI on the main thread (required by AppKit).
+        std::thread server_thread([&server]() {
+            server.start(); // Blocks until server.stop() is called
+        });
+        server_thread.detach();
+
+        std::cout << "Launching native window..." << std::endl;
+        launch_native_window(config.port, on_window_close); // Blocks until window closes
+    } else {
+        // Headless mode: run the server on the main thread (no GUI)
+        std::cout << "Running in headless mode (no native window)." << std::endl;
+        server.start(); // Blocks until stopped
+    }
 
     std::cout << "Shutdown complete." << std::endl;
     return 0;

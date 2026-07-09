@@ -23,11 +23,6 @@ void Server::start() {
         {"Access-Control-Allow-Headers", "Content-Type"}
     });
 
-    if (config_.open_browser) {
-        std::string cmd = "open http://localhost:" + std::to_string(config_.port);
-        int ret = system(cmd.c_str());
-        (void)ret; // ignore
-    }
 
     std::cout << "Starting Server on http://localhost:" << config_.port << std::endl;
     svr_.listen("127.0.0.1", config_.port);
