@@ -88,17 +88,24 @@ int main(int argc, char** argv) {
     }
     std::cout << "Found " << added << " model(s)." << std::endl;
 
-    // 4b. Cleanup: deactivate models whose files no longer exist on disk
+    // 4b. Cleanup: deactivate models whose files no longer exist on disk or are too small
     auto db_models = crud.get_all_models();
     int deactivated = 0;
     for (const auto& m : db_models) {
+        bool should_deactivate = false;
         if (!fs::exists(m.path)) {
+            should_deactivate = true;
+        } else if (fs::file_size(m.path) < 100 * 1024 * 1024) {
+            should_deactivate = true;
+        }
+
+        if (should_deactivate) {
             crud.deactivate_model(m.id);
             deactivated++;
         }
     }
     if (deactivated > 0) {
-        std::cout << "Deactivated " << deactivated << " model(s) with missing files." << std::endl;
+        std::cout << "Deactivated " << deactivated << " stale or small model(s)." << std::endl;
     }
 
     // 5. Start Server

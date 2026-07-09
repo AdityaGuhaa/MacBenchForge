@@ -182,11 +182,18 @@ void setup_routes(httplib::Server& svr, Config& config, Database& db, Crud& crud
             added++;
         }
 
-        // Deactivate models whose files no longer exist
+        // Deactivate models whose files no longer exist or are too small
         auto db_models = crud.get_all_models();
         int deactivated = 0;
         for (const auto& m : db_models) {
+            bool should_deactivate = false;
             if (!std::filesystem::exists(m.path)) {
+                should_deactivate = true;
+            } else if (std::filesystem::file_size(m.path) < 100 * 1024 * 1024) {
+                should_deactivate = true;
+            }
+
+            if (should_deactivate) {
                 crud.deactivate_model(m.id);
                 deactivated++;
             }
