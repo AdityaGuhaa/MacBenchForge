@@ -18,6 +18,8 @@ window.benchmarkTab = {
             const config = window.appData.config;
             
             const mSelect = document.getElementById('bm-model-select');
+            const currentSelected = mSelect.value;
+            
             mSelect.innerHTML = '';
             models.forEach(m => {
                 const opt = document.createElement('option');
@@ -25,6 +27,10 @@ window.benchmarkTab = {
                 opt.textContent = `${m.name} (${m.quant_label} - ${m.size_label})`;
                 mSelect.appendChild(opt);
             });
+            
+            if (currentSelected) {
+                mSelect.value = currentSelected;
+            }
 
             const pSelect = document.getElementById('bm-preset-select');
             if (pSelect.children.length === 0) {
