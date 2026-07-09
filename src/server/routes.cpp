@@ -191,6 +191,8 @@ void setup_routes(httplib::Server& svr, Config& config, Database& db, Crud& crud
                 should_deactivate = true;
             } else if (std::filesystem::file_size(m.path) < 100 * 1024 * 1024) {
                 should_deactivate = true;
+            } else if (std::filesystem::path(m.path).filename().string().find("mmproj-") == 0) {
+                should_deactivate = true;
             }
 
             if (should_deactivate) {

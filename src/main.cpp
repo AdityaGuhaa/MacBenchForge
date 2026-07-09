@@ -97,6 +97,8 @@ int main(int argc, char** argv) {
             should_deactivate = true;
         } else if (fs::file_size(m.path) < 100 * 1024 * 1024) {
             should_deactivate = true;
+        } else if (fs::path(m.path).filename().string().find("mmproj-") == 0) {
+            should_deactivate = true;
         }
 
         if (should_deactivate) {

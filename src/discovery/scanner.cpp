@@ -61,16 +61,18 @@ std::vector<Model> Scanner::scan(const std::vector<std::string>& dirs, bool recu
                     try {
                         const auto& entry = *it;
                         if (entry.is_regular_file() && entry.path().extension() == ".gguf") {
+                            std::string filename = entry.path().filename().string();
                             uint64_t size = fs::file_size(entry);
-                            // Ignore files < 100 MB (e.g., vocabularies)
-                            if (size >= 100 * 1024 * 1024) {
+                            
+                            // Ignore files < 100 MB and multi-modal projection files (mmproj-*)
+                            if (size >= 100 * 1024 * 1024 && filename.find("mmproj-") != 0) {
                                 Model m;
                                 m.id = 0;
                                 m.name = entry.path().stem().string();
                                 m.path = entry.path().string();
                                 m.file_size = size;
                                 m.size_label = format_size(m.file_size);
-                                m.quant_label = extract_quant(entry.path().filename().string());
+                                m.quant_label = extract_quant(filename);
                                 m.is_active = true;
                                 models.push_back(m);
                             }
@@ -84,15 +86,16 @@ std::vector<Model> Scanner::scan(const std::vector<std::string>& dirs, bool recu
                     if (ec) continue;
                     try {
                         if (entry.is_regular_file() && entry.path().extension() == ".gguf") {
+                            std::string filename = entry.path().filename().string();
                             uint64_t size = fs::file_size(entry);
-                            if (size >= 100 * 1024 * 1024) {
+                            if (size >= 100 * 1024 * 1024 && filename.find("mmproj-") != 0) {
                                 Model m;
                                 m.id = 0;
                                 m.name = entry.path().stem().string();
                                 m.path = entry.path().string();
                                 m.file_size = size;
                                 m.size_label = format_size(m.file_size);
-                                m.quant_label = extract_quant(entry.path().filename().string());
+                                m.quant_label = extract_quant(filename);
                                 m.is_active = true;
                                 models.push_back(m);
                             }
