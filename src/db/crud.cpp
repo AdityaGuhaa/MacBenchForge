@@ -46,10 +46,14 @@ std::optional<HardwareInfo> Crud::get_latest_hardware() {
 
 int Crud::insert_model(const Model& model) {
     SQLite::Statement stmt(db_, R"(
-        INSERT OR IGNORE INTO models
+        INSERT INTO models
             (name, path, size_label, file_size,
              is_active, hf_repo_id, hf_filename, quant_label)
         VALUES (?, ?, ?, ?, 1, ?, ?, ?)
+        ON CONFLICT(path) DO UPDATE SET
+            is_active = 1,
+            file_size = excluded.file_size,
+            size_label = excluded.size_label
     )");
     stmt.bind(1, model.name);
     stmt.bind(2, model.path);
