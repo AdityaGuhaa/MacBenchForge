@@ -34,13 +34,15 @@
 
 * **Apple Silicon Native**: Built from the ground up to aggressively leverage Apple's Metal Performance Shaders via `llama.cpp`, pushing your Unified Memory and GPU cores to their absolute limit.
 * **HuggingFace Hub Integration**: Browse, search, and download `.gguf` models straight from the HuggingFace Hub inside the app. 
-* **Native macOS File Picker**: Securely load local models right from Finder into the dashboard.
+* **Native macOS File Picker & Discovery**: Securely load local models right from Finder into the dashboard, or scan common macOS directories (`~/Downloads`, `~/.lmstudio`, etc.) for instant discovery.
+* **Intelligent File Filtering**: Automatically ignores non-generative multi-modal projector weights (`mmproj-`) and sub-100MB vocabulary files to ensure benchmark stability.
+* **Smart Data Persistence**: SQLite background engine uses `UPSERT` logic to seamlessly track, clean up, and reactivate dormant local models.
 * **Zero-Bloat Architecture**: The frontend is 100% Vanilla HTML, CSS, and JS. No React, no Node.js, no `npm install`. Just blazing fast execution.
 * **Advanced Benchmarking**: 
   * Test **Time To First Token (TTFT)** and **Tokens per Second (t/s)**.
   * Simulate real-world loads with customizable **Prompt Types** (Short QA, Long Code Generation, etc.) and **Presets** (Quick vs. Thorough).
 * **Hardware Telemetry**: Automatically detects your specific M-series chip, CPU/GPU core counts, system RAM, and dynamic VRAM Metal wiring limits (via `iogpu.wired_limit_mb`) in real-time.
-* **Beautiful Visualizations**: A sleek, dark-themed glassmorphic UI featuring live progress bars, toast notifications, and `Chart.js` graphs to compare your run history.
+* **Beautiful Visualizations**: A sleek, dark-themed glassmorphic UI featuring live progress bars, toast notifications, and `Chart.js` graphs with inline tokens-per-second data labels.
 * **Data Portability**: Export your benchmark run history seamlessly to JSON or CSV.
 
 ---
@@ -126,6 +128,12 @@ Want to share your compiled build with others? MacBenchForge includes a packagin
 ./packaging/create_dmg.sh
 ```
 This drops a deployable `.dmg` in your root folder. *(Keep in mind: end-users will still need to run `brew install llama.cpp` to execute the benchmarks).*
+
+---
+
+## Security
+
+If you discover a security vulnerability in MacBenchForge, please see our [Security Policy](SECURITY.md) for instructions on how to securely report it. We take security seriously and appreciate your help in keeping the app safe.
 
 ---
 
