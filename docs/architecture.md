@@ -32,9 +32,9 @@ flowchart TD
 
 - **Main (`src/main.cpp`)**: The entry point. Loads configuration, initializes the database, detects hardware, scans for existing models, and starts the HTTP server.
 - **Config (`src/config/`)**: Parses `config.toml` using `toml++`.
-- **Database (`src/db/`)**: Uses `SQLiteCpp` to manage local state (models, downloads, hardware info, benchmark configurations, and results).
+- **Database (`src/db/`)**: Uses `SQLiteCpp` to manage local state (models, downloads, hardware info, benchmark configurations, and results). Implements robust `UPSERT` mechanisms to handle dormant or reactivated state.
 - **Hardware (`src/hardware/`)**: Uses macOS native APIs (`sysctl`, `IOKit`, `mach`) to detect Apple Silicon specs and poll memory usage.
-- **Discovery (`src/discovery/`)**: Scans the filesystem for `.gguf` files.
+- **Discovery (`src/discovery/`)**: Scans standard macOS directories for `.gguf` files while intelligently filtering out multi-modal projectors (`mmproj-`) and tiny vocabulary files.
 - **HuggingFace (`src/huggingface/`)**: Uses `libcurl` to query the HF API and download models on background threads.
 - **Benchmark (`src/benchmark/`)**: Spawns `llama-bench` as a subprocess, parses its JSON output, and coordinates memory polling.
 - **Server (`src/server/`)**: Uses `cpp-httplib` to provide a REST API and serve static frontend files.
@@ -44,5 +44,5 @@ flowchart TD
 The frontend is a lightweight Single Page Application (SPA) located in the `frontend/` directory.
 - **No Build Tools**: It uses vanilla HTML5, CSS3, and ES6 JavaScript.
 - **Theming**: Heavily utilizes CSS custom properties for a premium dark mode glassmorphism UI.
-- **Charts**: Visualizations are powered by `Chart.js` loaded via CDN.
+- **Charts**: Visualizations are powered by `Chart.js` loaded via CDN, utilizing custom inline plugins for granular data labeling.
 - **API Client**: A simple wrapper (`js/api.js`) handles all communication with the C++ backend.

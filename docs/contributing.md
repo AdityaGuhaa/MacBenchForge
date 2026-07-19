@@ -30,3 +30,7 @@ We welcome contributions! Please follow these guidelines to help keep the projec
 5. Create a new Pull Request.
 
 Ensure your code compiles without warnings on Apple Silicon and that the frontend works in Safari/Chrome.
+
+## Security Vulnerabilities
+
+If you discover a security vulnerability, please do not report it in public issues or pull requests. See our [Security Policy](../SECURITY.md) for instructions on how to securely report it.
