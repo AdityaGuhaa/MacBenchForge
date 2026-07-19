@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MacBenchForge — The Ultimate LLM Benchmarking Suite for Apple Silicon</title>
+    <meta name="description" content="MacBenchForge is a lightning-fast, C++ powered local benchmarking suite designed exclusively for Apple Silicon Macs. Download, run, and analyze LLM performance with full Metal GPU acceleration.">
+    <meta name="keywords" content="MacBenchForge, Apple Silicon, LLM, benchmark, Metal GPU, M1, M2, M3, M4, M5, macOS, llama.cpp, GGUF">
+    <meta name="author" content="Aditya Guha">
+    <meta property="og:title" content="MacBenchForge — LLM Benchmarking for Apple Silicon">
+    <meta property="og:description" content="The ultimate native LLM benchmarking dashboard for Apple Silicon Macs. C++ powered, Metal accelerated, beautifully designed.">
+    <meta property="og:type" content="website">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Clean Background -->
+    <div class="bg-canvas">
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="#" class="nav-brand">
+                <img src="assets/logo.png" alt="MacBenchForge" class="nav-logo">
+                <span class="nav-brand-text">MacBenchForge</span>
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#screenshots">Screenshots</a>
+                <a href="#architecture">Architecture</a>
+                <a href="#install">Install</a>
+                <a href="https://github.com/AdityaGuhaa/MacBenchForge" target="_blank" rel="noopener" class="nav-github" title="GitHub">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 17.07 3.633 16.7 3.633 16.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg>
+                </a>
+            </div>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#features">Features</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#install">Install</a>
+        <a href="https://github.com/AdityaGuhaa/MacBenchForge" target="_blank" rel="noopener">GitHub</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Open Source &middot; Apache 2.0
+            </div>
+            <h1 class="hero-title">
+                The Ultimate LLM Benchmark<br>
+                for <span class="gradient-text">Apple Silicon</span>
+            </h1>
+            <p class="hero-subtitle">
+                MacBenchForge is a lightning-fast, C++ powered benchmarking suite built exclusively for M-series Macs. 
+                Push your Metal GPU to the absolute limit with a stunning glassmorphic dashboard.
+            </p>
+            <div class="hero-actions">
+                <a href="https://github.com/AdityaGuhaa/MacBenchForge/releases/latest" class="btn btn-primary" id="btn-download">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download .dmg
+                </a>
+                <a href="https://github.com/AdityaGuhaa/MacBenchForge" target="_blank" rel="noopener" class="btn btn-secondary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 17.07 3.633 16.7 3.633 16.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg>
+                    View on GitHub
+                </a>
+            </div>
+            <div class="hero-chips">
+                <span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0-4h18"/></svg> C++17</span>
+                <span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg> macOS 13+</span>
+                <span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Metal GPU</span>
+                <span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg> M1–M5</span>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-glow"></div>
+            <img src="assets/screenshot-dashboard.jpg" alt="MacBenchForge Dashboard" class="hero-screenshot" id="hero-screenshot">
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="section-inner">
+            <div class="section-header">
+                <span class="section-label">Capabilities</span>
+                <h2 class="section-title">Everything you need to benchmark LLMs</h2>
+                <p class="section-subtitle">Designed with a zero-bloat philosophy. No Node.js, no npm, no Electron. Just pure C++ and Vanilla JS delivering native performance.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg>
+                    </div>
+                    <h3>Apple Silicon Native</h3>
+                    <p>Aggressively leverages Metal Performance Shaders via llama.cpp, pushing Unified Memory and GPU cores to their absolute limit.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+                    </div>
+                    <h3>HuggingFace Integration</h3>
+                    <p>Browse, search, and download .gguf models directly from the HuggingFace Hub. Curated Apple Silicon recommendations included.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    <h3>Advanced Benchmarking</h3>
+                    <p>Measure TTFT, tokens/sec, prompt eval, and generation speed. Customizable presets from Quick to Thorough with varied prompt types.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    </div>
+                    <h3>Hardware Telemetry</h3>
+                    <p>Real-time detection of your M-series chip, CPU/GPU core counts, system RAM, and dynamic Metal VRAM wiring limits.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                    </div>
+                    <h3>Beautiful Visualizations</h3>
+                    <p>Glassmorphic dark UI with live Chart.js graphs, radar comparisons, progress bars, and toast notifications for a premium feel.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    </div>
+                    <h3>Data Portability</h3>
+                    <p>Export your complete benchmark history to JSON or CSV. Compare runs, share results, and track performance across model upgrades.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section class="section section-dark" id="screenshots">
+        <div class="section-inner">
+            <div class="section-header">
+                <span class="section-label">Interface</span>
+                <h2 class="section-title">Designed to be beautiful</h2>
+                <p class="section-subtitle">A premium glassmorphism UI that makes benchmarking feel delightful. Dark mode, live telemetry, and stunning visualizations.</p>
+            </div>
+            <div class="screenshot-showcase">
+                <div class="screenshot-tabs">
+                    <button class="ss-tab active" data-target="ss-dashboard">Dashboard</button>
+                    <button class="ss-tab" data-target="ss-benchmark">Benchmark</button>
+                    <button class="ss-tab" data-target="ss-history">History & Charts</button>
+                </div>
+                <div class="screenshot-viewer">
+                    <div class="screenshot-frame">
+                        <div class="frame-dots">
+                            <span class="dot dot-red"></span>
+                            <span class="dot dot-yellow"></span>
+                            <span class="dot dot-green"></span>
+                        </div>
+                        <img id="ss-dashboard" src="assets/screenshot-dashboard.jpg" alt="MacBenchForge Dashboard" class="ss-img active">
+                        <img id="ss-benchmark" src="assets/screenshot-benchmark.jpg" alt="MacBenchForge Benchmark" class="ss-img">
+                        <img id="ss-history" src="assets/screenshot-history.jpg" alt="MacBenchForge History" class="ss-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="section" id="architecture">
+        <div class="section-inner">
+            <div class="section-header">
+                <span class="section-label">Under the Hood</span>
+                <h2 class="section-title">Clean, separated architecture</h2>
+                <p class="section-subtitle">A C++17 backend with an ultra-lightweight REST API, SQLite persistence, and a zero-dependency frontend SPA served from memory.</p>
+            </div>
+            <div class="arch-grid">
+                <div class="arch-card">
+                    <div class="arch-label">Backend</div>
+                    <h3>C++17 Engine</h3>
+                    <ul>
+                        <li><span class="arch-tag">cpp-httplib</span> Ultra-lightweight REST API</li>
+                        <li><span class="arch-tag">SQLiteCpp</span> Persistent history tracking</li>
+                        <li><span class="arch-tag">osascript</span> Native macOS integration</li>
+                        <li><span class="arch-tag">libcurl</span> HuggingFace Hub downloads</li>
+                    </ul>
+                </div>
+                <div class="arch-card">
+                    <div class="arch-label">Engine</div>
+                    <h3>Inference Core</h3>
+                    <ul>
+                        <li><span class="arch-tag">llama-bench</span> Isolated LLM throughput</li>
+                        <li><span class="arch-tag">Metal</span> Full GPU acceleration</li>
+                        <li><span class="arch-tag">IOKit</span> Hardware detection via sysctl</li>
+                        <li><span class="arch-tag">Memory Poller</span> Real-time RAM telemetry</li>
+                    </ul>
+                </div>
+                <div class="arch-card">
+                    <div class="arch-label">Frontend</div>
+                    <h3>Zero-Bloat SPA</h3>
+                    <ul>
+                        <li><span class="arch-tag">Vanilla JS</span> No frameworks, no build tools</li>
+                        <li><span class="arch-tag">CSS3</span> Custom properties + glassmorphism</li>
+                        <li><span class="arch-tag">Chart.js</span> Performance visualizations</li>
+                        <li><span class="arch-tag">REST</span> Clean API client layer</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Install / Download Section -->
+    <section class="section section-dark" id="install">
+        <div class="section-inner">
+            <div class="section-header">
+                <span class="section-label">Get Started</span>
+                <h2 class="section-title">Up and running in minutes</h2>
+                <p class="section-subtitle">Download the pre-built .dmg for Apple Silicon or build from source with a few commands.</p>
+            </div>
+            <div class="install-grid">
+                <div class="install-card install-primary">
+                    <div class="install-badge">Recommended</div>
+                    <h3>Download .dmg</h3>
+                    <p>Pre-built for Apple Silicon. Just download, mount, and drag to Applications.</p>
+                    <div class="install-meta">
+                        <span>v2.1.0</span>
+                        <span>~1.5 MB</span>
+                        <span>Apple Silicon</span>
+                    </div>
+                    <a href="https://github.com/AdityaGuhaa/MacBenchForge/releases/latest" class="btn btn-primary btn-full">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Download for macOS
+                    </a>
+                    <p class="install-note">Requires macOS Ventura (13.0)+ and <code>brew install llama.cpp</code></p>
+                </div>
+                <div class="install-card">
+                    <h3>Build from Source</h3>
+                    <p>Full control. Clone, build with CMake, and run locally.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Terminal</span>
+                            <button class="btn-copy" id="btn-copy-install" title="Copy to clipboard">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                            </button>
+                        </div>
+                        <pre><code><span class="code-comment"># Clone with submodules</span>
+git clone --recursive https://github.com/AdityaGuhaa/MacBenchForge.git
+cd MacBenchForge
+
+<span class="code-comment"># Install dependencies</span>
+brew install curl openssl cmake llama.cpp
+
+<span class="code-comment"># Build and launch</span>
+mkdir build && cd build
+cmake ..
+cmake --build . -j
+./bin/MacBenchForge</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section section-cta">
+        <div class="section-inner">
+            <div class="cta-content">
+                <h2>Ready to benchmark your Apple Silicon?</h2>
+                <p>Join the community of developers pushing their M-series Macs to the limit.</p>
+                <div class="cta-actions">
+                    <a href="https://github.com/AdityaGuhaa/MacBenchForge" target="_blank" rel="noopener" class="btn btn-primary btn-lg">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 17.07 3.633 16.7 3.633 16.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg>
+                        Star on GitHub
+                    </a>
+                    <a href="https://github.com/AdityaGuhaa/MacBenchForge/releases/latest" class="btn btn-secondary btn-lg">
+                        Download v2.1.0
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="assets/logo.png" alt="MacBenchForge" class="footer-logo">
+                <span>MacBenchForge</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com/AdityaGuhaa/MacBenchForge" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://github.com/AdityaGuhaa/MacBenchForge/releases" target="_blank" rel="noopener">Releases</a>
+                <a href="https://github.com/AdityaGuhaa/MacBenchForge/issues" target="_blank" rel="noopener">Issues</a>
+                <a href="https://github.com/AdityaGuhaa/MacBenchForge/blob/main/LICENSE" target="_blank" rel="noopener">License</a>
+            </div>
+            <div class="footer-copy">
+                <p>&copy; 2026 Aditya Guha. Licensed under Apache 2.0.</p>
+                <p>Built with ❤️ for Apple Silicon.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
