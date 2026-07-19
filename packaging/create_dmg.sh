@@ -30,7 +30,15 @@ cp packaging/Info.plist "${APP_DIR}/Contents/"
 # Fix rpaths for Homebrew libs if necessary (simplified for this script)
 # In a real distribution, we'd copy libcurl and libssl into Frameworks and use install_name_tool
 
+# Clean up any extended attributes (like quarantine) before signing
+xattr -cr "${APP_DIR}"
+
+# Ad-hoc sign the application bundle so macOS doesn't think it's corrupted
+echo "Ad-hoc signing the .app bundle..."
+codesign --force --deep --sign - "${APP_DIR}"
+
 echo "Creating DMG..."
+rm -f "${DMG_NAME}"
 hdiutil create -volname "${APP_NAME}" -srcfolder "${APP_DIR}" -ov -format UDZO "${DMG_NAME}"
 
 echo "Success! Created ${DMG_NAME}"
