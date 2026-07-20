@@ -129,6 +129,16 @@ Want to share your compiled build with others? MacBenchForge includes a packagin
 ```
 This drops a deployable `.dmg` in your root folder. *(Keep in mind: end-users will still need to run `brew install llama.cpp` to execute the benchmarks).*
 
+### Troubleshooting: "App is damaged" Error
+
+Because macOS applies a quarantine flag to downloaded `.dmg` files from unidentified developers, you may encounter an error stating the app is "damaged and can't be opened" when first trying to run it.
+
+To bypass this error, simply **Right-Click (or Control-Click)** the `MacBenchForge.app` inside your Applications folder and select **Open**.
+
+Check out this quick video tutorial on how to resolve the issue:
+
+[![Gatekeeper Fix Tutorial](https://img.youtube.com/vi/XOzACmwUTOY/0.jpg)](https://www.youtube.com/watch?v=XOzACmwUTOY)
+
 ---
 
 ## Security
